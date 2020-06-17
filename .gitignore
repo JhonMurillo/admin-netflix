@@ -1,0 +1,9 @@
+# /admin_netflix/bin
+# /admin_netflix/include
+# /admin_netflix/lib
+/admin_netflix/__pycache__
+.vscode
+/media
+# migrations
+__pycache__
+.env

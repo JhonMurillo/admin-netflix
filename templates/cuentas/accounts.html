@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block head_content %}
+<title>Crear Cuenta</title>
+{% endblock%} {% block container %}
+<div class="container mb-5" style="margin-top: 8em;">
+    <div class="row">
+        <button type="button" class="btn btn-primary"><a href="{% url 'cuentas:create_account' %}" style="color: #fff;text-decoration: none;">Crear una cuenta nueva</a></button>
+        </hr>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for account in accounts %}
+                    <tr>
+                        <th scope="row">{{ account.pk }}</th>
+                        <td>{{ account.email }}</td>
+                        <td>{{ account.password }}</td>
+                    </tr>
+                    {% empty %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block head_content %}
+<title>Dashboard</title>
+{% endblock%} {% block container %}
+<div class="container mb-5" style="margin-top: 8em;">
+  <div class="row">
+    <div class="col-sm-4 d-flex justify-content-center">
+      <img src="" alt="" class="rounded-circle" width="150px" />
+    </div>
+    <div class="col-sm-8">
+      <h2 style="font-weight: 100;">
+        {{ user.username }} {% if user == request.user %}
+        <a href="" style="display: none;" class="ml-5 btn btn-sm btn-outline-info">
+          Edit profile
+        </a>
+        {% else %}
+        <a href="" style="display: none;" class="ml-5 btn btn-sm btn-primary">
+          Follow
+        </a>
+        {% endif %}
+      </h2>
+      <div class="row mt-2" style="font-size: 1.2em">
+        <div class="col">
+          <span class="badge badge-primary">{{ total_profile_money  }}</span> </br> Total
+        </div>
+        <div class="col">
+          <span class="badge badge-success">{{ total_profile_pay  }}</span> </br> Total Pagado
+        </div>
+        <div class="col">
+          <span class="badge badge-danger">{{ total_profile_wo_pay  }}</span> </br> Total sin pagar
+        </div>
+        <div class="col">
+          <span class="badge badge-secondary">{{ total_account_invest  }}</span> </br> Total Invertido
+        </div>
+        <div class="col">
+          <span class="badge badge-info">{{ total_gain  }}</span> </br> Total Ganancia
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-sm-12">
+          <p></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<div class="container" id="user-posts">
+  <div class="row">
+    <div class="col">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-danger">Cuentas sin pago</li>
+        {% for account_without_pay in accounts_without_pay %}
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ account_without_pay.profile.profile_name }}</h5>
+            <small>{{ account_without_pay.profile.pay_value }}</small>
+          </div>
+          <p class="mb-1">{{ account_without_pay.profile.account.email }}</p>
+        </a>
+        {% empty %}
+        <li class="list-group-item">No hay Cuentas sin pagar!</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-warning">Cuentas con Expiracion Cercana</li>
+        {% for account_near_to_expire in accounts_near_to_expire %}
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ account_near_to_expire.profile.profile_name }}</h5>
+            <small>{{ account_near_to_expire.pay_value }}</small>
+          </div>
+          <p class="mb-1">{{ account_near_to_expire.profile.account.email }}</p>
+          <p class="mb-1">{{ account_near_to_expire.expire_at }}</p>
+        </a>
+        {% empty %}
+        <li class="list-group-item">No hay Cuentas con expiracion cercana!</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

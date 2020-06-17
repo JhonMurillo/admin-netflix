@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% block head_content %}
+<title>Crear Cuenta</title>
+{% endblock%} {% block container %}
+<div class="container mb-5" style="margin-top: 8em;">
+  <div class="row">
+    <div class="col">
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ form.non_field_errors }}
+      </div>
+      {% endif %}
+      {% if form.errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ form.errors }}
+      </div>
+      {% endif %}
+      <form action="{% url 'cuentas:create_account' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="user" value="{{user.pk}}" />
+
+        <div class="form-group">
+          <input class="form-control {% if form.email.errors %}is-invalid{% endif %}" type="email" placeholder="E-mail"
+            name="email" required="true" value="{% if form.errors %} {{form.email.value}}{% endif %}" />
+          <div class="invalid-feedback">
+            {% for error in form.email.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input class="form-control {% if form.password.errors %}is-invalid{% endif %}" type="text"
+            placeholder="Password" name="password" required="true"
+            value="{% if form.errors %} {{form.password.value}}{% endif %}" />
+          <div class="invalid-feedback">
+            {% for error in form.password.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input class="form-control {% if form.active_at.errors %}is-invalid{% endif %}" type="date"
+            placeholder="Fecha De Activación" name="active_at" required="true"
+            value="{% if form.errors %} {{form.active_at.value}}{% endif %}" />
+          <div class="invalid-feedback">
+            {% for error in form.active_at.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input class="form-control {% if form.expire_at.errors %}is-invalid{% endif %}" type="date"
+            placeholder="Fecha De Expiración" name="expire_at" required="true"
+            value="{% if form.errors %} {{form.expire_at.value}}{% endif %}" />
+          <div class="invalid-feedback">
+            {% for error in form.expire_at.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input class="form-control {% if form.pay_value.errors %}is-invalid{% endif %}" type="number"
+            placeholder="Valor de la cuenta" name="pay_value" required="true"
+            value="{% if form.errors %} {{form.pay_value.value}}{% endif %}" />
+          <div class="invalid-feedback">
+            {% for error in form.pay_value.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block mt-5" type="submit">Guardar!</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+{% endblock %}
