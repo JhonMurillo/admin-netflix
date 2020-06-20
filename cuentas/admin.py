@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from cuentas.models import Account, AccountDetail, Profile, ProfileDetail
 
-admin.site.register(Account)
+
 
 class AccountDetailAdmin(admin.ModelAdmin):
     list_display = ('pk','account_email', 'pay_value', 'active_at', 'expire_at')
@@ -24,9 +24,18 @@ class AccountDetailAdmin(admin.ModelAdmin):
     def account_email(self, obj):
         return obj.account.email
 
-admin.site.register(AccountDetail, AccountDetailAdmin)
+class AccountDetailInline(admin.TabularInline):
+    model = AccountDetail
+    extra = 1
+    can_delete = False
+    verbose_name_plural = 'Detalle De La Cuenta'
 
-admin.site.register(Profile)
+class AccountAdmin(admin.ModelAdmin):
+    inlines = (AccountDetailInline,)
+
+admin.site.register(Account, AccountAdmin)
+
+admin.site.register(AccountDetail, AccountDetailAdmin)
 
 class ProfileDetailAdmin(admin.ModelAdmin):
     list_display = ('pk','profile_client_name','profile_name','account_email','pin','profile_pay_value','pay_value','is_pay', 'active_at', 'expire_at')
@@ -63,6 +72,17 @@ class ProfileDetailAdmin(admin.ModelAdmin):
         return obj.profile.pin
     def profile_pay_value(self, obj):
         return obj.profile.pay_value
+
+class ProfileDetailInline(admin.TabularInline):
+    model = ProfileDetail
+    extra = 1
+    can_delete = False
+    verbose_name_plural = 'Detalle Del Perfil'
+
+class ProfileAdmin(admin.ModelAdmin):
+    inlines = (ProfileDetailInline,)
+
+admin.site.register(Profile, ProfileAdmin)
 
 admin.site.register(ProfileDetail, ProfileDetailAdmin)
 
