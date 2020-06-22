@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from cuentas.models import Account, AccountDetail, Profile, ProfileDetail
+from cuentas.models import Account, AccountDetail, Profile, ProfileDetail, Provider
 
 
 
@@ -86,3 +86,5 @@ admin.site.register(Profile, ProfileAdmin)
 
 admin.site.register(ProfileDetail, ProfileDetailAdmin)
 
+
+admin.site.register(Provider)

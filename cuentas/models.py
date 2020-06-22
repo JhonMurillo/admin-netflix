@@ -14,7 +14,14 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+class Provider(BaseModel):
+    name = models.CharField(max_length=200)
+    phone = models.CharField(max_length=20,  default=None, blank=True, null=True)
+    email = models.EmailField(max_length=200,  default=None, blank=True, null=True)
+    def __str__(self):
+        return 'Proveedor: {}'.format(self.name)
 class Account(BaseModel):
+    provider = models.ForeignKey(Provider,on_delete=models.CASCADE,  default=None, blank=True, null=True, related_name='+')
     email = models.EmailField(max_length=200)
     password = models.CharField(max_length=200)
     def __str__(self):
