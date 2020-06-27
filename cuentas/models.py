@@ -26,8 +26,7 @@ class Account(BaseModel):
     password = models.CharField(max_length=200)
     def __str__(self):
         return 'Cuenta: {}, Password: XXXXXX{}'.format(self.email, self.password)
-
-
+        
 class AccountDetail(BaseModel):
     account = models.ForeignKey(Account,on_delete=models.CASCADE)
     pay_value = models.DecimalField(max_digits=8, decimal_places=2, default=0)
@@ -59,3 +58,18 @@ class ProfileDetail(BaseModel):
     expire_at = models.DateField()
     def __str__(self):
         return 'Cuenta: {}, Password: XXXXXX{}, Perfil: {}, Activado el: {}'.format(self.profile.account.email, self.profile.account.password, self.profile.profile_name, self.active_at)
+
+
+class Withdraw(BaseModel):
+    description = models.TextField(max_length=4000)
+    withdraw_value = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    def __str__(self):
+        return 'Descripcion: {}, Pago: {}'.format(self.description, self.withdraw_value)
+
+
+class Wallet(BaseModel):
+    profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
+    description = models.TextField(max_length=4000)
+    wallet_value = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    def __str__(self):
+        return 'Descripcion: {}, Pago: {}'.format(self.description, self.wallet_value)

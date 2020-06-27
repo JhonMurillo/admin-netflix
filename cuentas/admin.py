@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from cuentas.models import Account, AccountDetail, Profile, ProfileDetail, Provider
+from cuentas.models import Account, AccountDetail, Profile, ProfileDetail, Provider, Withdraw, Wallet
 
 
 
@@ -86,5 +86,53 @@ admin.site.register(Profile, ProfileAdmin)
 
 admin.site.register(ProfileDetail, ProfileDetailAdmin)
 
-
 admin.site.register(Provider)
+
+class WithdrawAdmin(admin.ModelAdmin):
+    list_display = ('pk','description','withdraw_value')
+    list_display_links = ('pk','description')
+    list_editable = ('withdraw_value',)
+    search_fields = (
+        'description',
+        'withdraw_value',
+        'created_at'
+    )
+
+    list_filter=(
+        'description',
+        'withdraw_value',
+        'created_at'
+    )
+
+    ordering = ('-created_at',)
+
+admin.site.register(Withdraw, WithdrawAdmin)
+
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ('pk','profile_client_name','profile_name','description','wallet_value')
+    list_display_links = ('pk','profile_client_name','profile_name','description')
+    list_editable = ('wallet_value',)
+    search_fields = (
+        'profile__client_name',
+        'profile__name',
+        'description',
+        'wallet_value',
+        'created_at'
+    )
+
+    list_filter=(
+        'profile__client_name',
+        'profile__profile_name',
+        'description',
+        'wallet_value',
+        'created_at'
+    )
+
+    ordering = ('-created_at',)
+
+    def profile_client_name(self, obj):
+        return obj.profile.client_name
+    def profile_name(self, obj):
+        return obj.profile.profile_name
+
+admin.site.register(Wallet, WalletAdmin)
