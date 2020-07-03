@@ -38,13 +38,14 @@ admin.site.register(Account, AccountAdmin)
 admin.site.register(AccountDetail, AccountDetailAdmin)
 
 class ProfileDetailAdmin(admin.ModelAdmin):
-    list_display = ('pk','profile_client_name','profile_name','account_email','pin','profile_pay_value','pay_value','is_pay', 'active_at', 'expire_at')
+    list_display = ('pk','profile_client_name','profile_name','account_email','pin','profile_pay_value','pay_value','is_pay','status_detail', 'active_at', 'expire_at')
     list_display_links = ('pk','profile_client_name', 'account_email')
-    list_editable = ('is_pay','pay_value')
+    list_editable = ('is_pay','pay_value', 'status_detail')
     search_fields = (
         'profile__account__email',
         'profile__client_name',
         'is_pay',
+        'status_detail',
         'active_at',
         'expire_at'
     )
@@ -52,6 +53,7 @@ class ProfileDetailAdmin(admin.ModelAdmin):
     list_filter=(
         'profile__account__email',
         'profile__client_name',
+        'status_detail',
         'active_at',
         'expire_at'
     )
@@ -79,8 +81,15 @@ class ProfileDetailInline(admin.TabularInline):
     can_delete = False
     verbose_name_plural = 'Detalle Del Perfil'
 
+class WalletInline(admin.TabularInline):
+    model = Wallet
+    extra = 0
+    max_num=0
+    can_delete = False
+    verbose_name_plural = 'Detalle Del Perfil'
+
 class ProfileAdmin(admin.ModelAdmin):
-    inlines = (ProfileDetailInline,)
+    inlines = (ProfileDetailInline, WalletInline)
 
 admin.site.register(Profile, ProfileAdmin)
 

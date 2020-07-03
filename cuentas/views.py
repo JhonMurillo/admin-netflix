@@ -29,10 +29,14 @@ class DahsboardView(LoginRequiredMixin, TemplateView):
         total_profile_wo_pay = total_profile_money['total_pay'] - total_profile_pay['total_pay']
         context['total_profile_wo_pay'] = "${:,.2f}".format(total_profile_wo_pay)
 
-        enddate = datetime.today()
-        startdate = enddate - timedelta(days=15)
-        context['accounts_near_to_expire'] = ProfileDetail.objects.filter(expire_at__range=[startdate, enddate],status = True).order_by('expire_at')[:100]
-        
+        expiration_days = 10
+        startdate = datetime.today()
+        enddate = startdate + timedelta(days=expiration_days)
+        context['accounts_near_to_expire'] = ProfileDetail.objects.filter(expire_at__range=[startdate, enddate],status = True, status_detail='CURRENT').order_by('expire_at')[:100]
+        context['expiration_days'] = expiration_days
+        context['startdate_filter'] = startdate.strftime('%m/%d/%Y')
+        context['enddate_filter'] = enddate.strftime('%m/%d/%Y')
+
         total_account_invest = AccountDetail.objects.filter(status=True).aggregate(total_pay=Sum('pay_value'))
         total_account_invest['total_pay'] = total_account_invest['total_pay']  if total_account_invest['total_pay'] != None else 0
         context['total_account_invest'] = "${:,.2f}".format(total_account_invest['total_pay'])

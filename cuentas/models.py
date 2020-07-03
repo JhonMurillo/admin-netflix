@@ -51,11 +51,21 @@ class Profile(BaseModel):
 
 
 class ProfileDetail(BaseModel):
+    CURRENT='CURRENT'
+    RENOVATED='RENOVATED'
+    CANCELED='CANCELED'
+    STATUSES = (
+      (CURRENT, 'Actual'),
+      (RENOVATED, 'Renovado'),
+      (CANCELED, 'Cancelado')
+      )
+
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
     is_pay = models.BooleanField(default=False)
     pay_value = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     active_at = models.DateField()
     expire_at = models.DateField()
+    status_detail = models.CharField(max_length=20, choices=STATUSES, default=CURRENT)
     def __str__(self):
         return 'Cuenta: {}, Password: XXXXXX{}, Perfil: {}, Activado el: {}'.format(self.profile.account.email, self.profile.account.password, self.profile.profile_name, self.active_at)
 
