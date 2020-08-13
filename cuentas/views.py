@@ -6,6 +6,10 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView, DetailView, ListView, FormView
 from django.views.generic.base import TemplateView
 from django.db.models import  Sum
+from django.forms.models import model_to_dict
+from django.http import  JsonResponse
+from django.core import serializers
+import json
 from cuentas.forms import CreateAccountForm
 from cuentas.models import Account, ProfileDetail, AccountDetail, Withdraw, Wallet
 from datetime import datetime, timedelta
@@ -81,3 +85,36 @@ class AccountListView(LoginRequiredMixin, ListView):
     ordering = ('-created_at',)
     paginate_by = 20
     context_object_name = 'accounts'
+
+def get_expire_expiration_today(request):
+    current_date = datetime.today()
+    accounts_near_to_expire_aux = ProfileDetail.objects.filter(expire_at=current_date,status = True, status_detail='CURRENT').order_by('expire_at')
+    accounts_expire_aux = ProfileDetail.objects.filter(expire_at__lt=current_date,status = True, status_detail='CURRENT').order_by('expire_at')
+    
+    
+    accounts_near_to_expire = list()
+    for obj in accounts_near_to_expire_aux:
+        account_near_to_expire = {
+            'profile_detail' : model_to_dict(obj),
+            'profile' : model_to_dict(obj.profile),
+            'account' : model_to_dict(obj.profile.account)
+        }
+        accounts_near_to_expire.append(account_near_to_expire)
+    
+    accounts_expire = list()
+    for obj in accounts_expire_aux:
+
+        account_expire = {
+            'profile_detail' : model_to_dict(obj),
+            'profile' : model_to_dict(obj.profile),
+            'account' : model_to_dict(obj.profile.account)
+        }
+        accounts_expire.append(account_expire)
+    
+
+    data ={
+        'accounts_near_to_expire': accounts_near_to_expire,
+        'accounts_expire': accounts_expire
+    } 
+
+    return JsonResponse(data, safe=False)

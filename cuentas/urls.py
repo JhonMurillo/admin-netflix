@@ -16,5 +16,10 @@ urlpatterns = [
         route='accounts',
         view = views.AccountListView.as_view(),
         name='accounts'
+    ),
+    path(
+        route='expires',
+        view = views.get_expire_expiration_today,
+        name='expires'
     )
 ]
